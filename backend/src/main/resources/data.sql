@@ -3,11 +3,12 @@ DELETE FROM tb_usuario;
 DELETE FROM tb_funcao;
 ALTER SEQUENCE sq_usuario RESTART WITH 1;
 ALTER SEQUENCE sq_funcao RESTART WITH 1;
-INSERT INTO tb_usuario(id_usuario, login_usuario, senha, nome, email, criado_por, data_criacao, modificado_por, data_alteracao) VALUES (sq_usuario.nextval,'maria2019', '$2a$10$duT4TtfhJiiQl4a8HAuol.U0mXorX/1YOi.KYwdDx.ajqdC7w3ZV6', 'Maria Silva de Carvalho', 'maria@teste.com', null, NOW(), null, NOW());
-INSERT INTO tb_usuario(id_usuario, login_usuario, senha, nome, email, criado_por, data_criacao, modificado_por, data_alteracao) VALUES (sq_usuario.nextval,'jose2019', '$2a$10$duT4TtfhJiiQl4a8HAuol.U0mXorX/1YOi.KYwdDx.ajqdC7w3ZV6', 'José Fernandes de Carvalho', 'jose@teste.com', null, NOW(), null, NOW());
-INSERT INTO tb_usuario(id_usuario, login_usuario, senha, nome, email, criado_por, data_criacao, modificado_por, data_alteracao) VALUES (sq_usuario.nextval,'pedro2019', '$2a$10$duT4TtfhJiiQl4a8HAuol.U0mXorX/1YOi.KYwdDx.ajqdC7w3ZV6', 'Pedro Oliveira Alves', 'pedro@teste.com', null, NOW(), null, NOW());
-INSERT INTO tb_usuario(id_usuario, login_usuario, senha, nome, email, criado_por, data_criacao, modificado_por, data_alteracao) VALUES (sq_usuario.nextval,'ana2019', '$2a$10$duT4TtfhJiiQl4a8HAuol.U0mXorX/1YOi.KYwdDx.ajqdC7w3ZV6', 'Ana Aparecida Ferreira', 'ana@teste.com', null, NOW(), null, NOW());
-INSERT INTO tb_usuario(id_usuario, login_usuario, senha, nome, email, criado_por, data_criacao, modificado_por, data_alteracao) VALUES (sq_usuario.nextval,'carlos2019', '$2a$10$duT4TtfhJiiQl4a8HAuol.U0mXorX/1YOi.KYwdDx.ajqdC7w3ZV6', 'Carlos Manoel de Oliveira', 'carlos@teste.com', null, NOW(), null, NOW());
+--senha: abc12345
+INSERT INTO tb_usuario(id_usuario, login_usuario, senha, nome, email, criado_por, data_criacao, modificado_por, data_alteracao) VALUES (sq_usuario.nextval,'maria2019', '$2a$10$La7k40SK9fyVMgBa4z1KseOzfn5J.hZMffKIdpcyTWkM61gFD4Oia', 'Maria Silva de Carvalho', 'maria@teste.com', null, NOW(), null, NOW());
+INSERT INTO tb_usuario(id_usuario, login_usuario, senha, nome, email, criado_por, data_criacao, modificado_por, data_alteracao) VALUES (sq_usuario.nextval,'jose2019', '$2a$10$La7k40SK9fyVMgBa4z1KseOzfn5J.hZMffKIdpcyTWkM61gFD4Oia', 'José Fernandes de Carvalho', 'jose@teste.com', null, NOW(), null, NOW());
+INSERT INTO tb_usuario(id_usuario, login_usuario, senha, nome, email, criado_por, data_criacao, modificado_por, data_alteracao) VALUES (sq_usuario.nextval,'pedro2019', '$2a$10$La7k40SK9fyVMgBa4z1KseOzfn5J.hZMffKIdpcyTWkM61gFD4Oia', 'Pedro Oliveira Alves', 'pedro@teste.com', null, NOW(), null, NOW());
+INSERT INTO tb_usuario(id_usuario, login_usuario, senha, nome, email, criado_por, data_criacao, modificado_por, data_alteracao) VALUES (sq_usuario.nextval,'ana2019', '$2a$10$La7k40SK9fyVMgBa4z1KseOzfn5J.hZMffKIdpcyTWkM61gFD4Oia', 'Ana Aparecida Ferreira', 'ana@teste.com', null, NOW(), null, NOW());
+INSERT INTO tb_usuario(id_usuario, login_usuario, senha, nome, email, criado_por, data_criacao, modificado_por, data_alteracao) VALUES (sq_usuario.nextval,'carlos2019', '$2a$10$La7k40SK9fyVMgBa4z1KseOzfn5J.hZMffKIdpcyTWkM61gFD4Oia', 'Carlos Manoel de Oliveira', 'carlos@teste.com', null, NOW(), null, NOW());
 INSERT INTO tb_funcao(id_funcao, nome) VALUES(sq_funcao.nextval, 'ROLE_USER');
 INSERT INTO tb_funcao(id_funcao, nome) VALUES(sq_funcao.nextval, 'ROLE_PM');
 INSERT INTO tb_funcao(id_funcao, nome) VALUES(sq_funcao.nextval, 'ROLE_ADMIN');
