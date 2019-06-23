@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class AngularSpringbootJwtApplication {
+public class ApplicationStart {
 
 	public static void main(String[] args) {
-		SpringApplication.run(AngularSpringbootJwtApplication.class, args);
+		SpringApplication.run(ApplicationStart.class, args);
 	}
 
 }
