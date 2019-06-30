@@ -4,13 +4,13 @@ import { Observable, ReplaySubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 import { TokenStorageService } from './token-storage.service';
-import { AuthLoginInfo } from './model/auth-login-info';
-import { JwtResponse } from './model/jwt-response';
+import { AuthLoginInfoVO } from '../common/model/vo/auth-login-info-vo';
+import { JwtResponseVO } from '../common/model/vo/jwt-response-vo';
 import { User } from '../common/model/user';
 import { Role, RoleName } from '../common/model/role';
 
 const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+  headers: new HttpHeaders({ 'Content-Type': 'application/json; charset=utf-8',  })
 };
 @Injectable({
   providedIn: 'root'
@@ -27,7 +27,7 @@ export class AuthService {
     private tokenStorage: TokenStorageService
   ) { }
 
-  login(credentials: AuthLoginInfo) {
+  login(credentials: AuthLoginInfoVO) {
     return this.attemptAuth(credentials).pipe(
       tap(data => {
         this.tokenStorage.saveToken(data.token);
@@ -44,8 +44,8 @@ export class AuthService {
     this._authStatus.next(AuthStatus.LOGGED_OUT);
   }  
 
-  private attemptAuth(credentials: AuthLoginInfo): Observable<JwtResponse> {
-    return this.http.post<JwtResponse>(this.loginUrl, credentials, httpOptions);
+  private attemptAuth(credentials: AuthLoginInfoVO): Observable<JwtResponseVO> {
+    return this.http.post<JwtResponseVO>(this.loginUrl, credentials, httpOptions);
   }
 
   get authStatus(): Observable<AuthStatus> {

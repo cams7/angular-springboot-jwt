@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth/auth.service';
+import { JwtResponseVO } from '../common/model/vo/jwt-response-vo';
 
 @Component({
   selector: 'app-home',
@@ -7,7 +8,7 @@ import { AuthService } from '../auth/auth.service';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-  private _info: any;
+  private _info: JwtResponseVO;
 
   constructor(
     private authService: AuthService
@@ -15,11 +16,12 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     let loggedUser = this.authService.loggedUser;
-    this._info = {
-      token : this.authService.token, 
-      username : loggedUser.username, 
-      authorities : loggedUser.roles.map(role => role.name)
-    };
+    if (loggedUser)
+      this._info = <JwtResponseVO>{
+        token: this.authService.token,
+        username: loggedUser.username,
+        authorities: loggedUser.roles.map(role => role.name)
+      };
   }
 
   get info() {

@@ -20,9 +20,17 @@ export class PmComponent implements OnInit {
         this._board = data;
       },
       error => {
-        this._errorMessage = `${error.status}: ${JSON.parse(error.error).message}`;
+        console.error('PmComponent.ngOnInit() => error: ', error);
+        this._errorMessage = `${error.status}: ${this.getErrorMessage(error)}`;
+      },
+      () => {   
+        console.log('PmComponent.ngOnInit() => completed');     
       }
     );
+  }
+
+  private getErrorMessage(error: any) {
+    return error.error.message ? error.error.message : JSON.parse(error.error).message ? JSON.parse(error.error).message : error.message;
   }
 
   get board() {

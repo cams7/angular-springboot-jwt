@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
-import { SignUpInfo } from '../common/model/vo/sign-up-info';
+import { User } from '../common/model/user';
 
 const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+  headers: new HttpHeaders({ 'Content-Type': 'application/json; charset=utf-8' })
 };
 @Injectable({
   providedIn: 'root'
@@ -18,7 +17,7 @@ export class RegisterService {
     private http: HttpClient
   ) { }
 
-  signUp(info: SignUpInfo): Observable<string> {
-    return this.http.post<string>(this.signupUrl, info, httpOptions);
+  signUp(user: User): Observable<User> {
+    return this.http.post<User>(this.signupUrl, user, httpOptions);
   }
 }

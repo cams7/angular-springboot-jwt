@@ -1,92 +1,52 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
-
-import { AuthService, AuthStatus } from '../auth/auth.service';
-import { AuthLoginInfo } from '../auth/model/auth-login-info';
-import { RoleName } from '../common/model/role';
+import { Component } from '@angular/core';
+import { AuthLoginInfoVO } from '../common/model/vo/auth-login-info-vo';
+import { BaseAuth } from '../auth/base-auth';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit, OnDestroy {
+export class LoginComponent extends BaseAuth {
 
   form: any = {};
-  private _isLoggedIn = false;
+
   private _isLoginFailed = false;
-  private _roles: RoleName[];
   private _errorMessage = '';
 
-  private loginInfo: AuthLoginInfo;
-
-  private statusSubscription: Subscription;
-
-  constructor(
-    private authService: AuthService
-  ) { }
-
-  ngOnInit() {
-    this.statusSubscription = this.authService.authStatus.subscribe(status => {
-      switch (status) {
-        case AuthStatus.LOGGED_IN: {
-          this.loggedIn();
-          break;
-        }
-        case AuthStatus.LOGGED_OUT: {
-          this.loggedIn(false);
-          break;
-        }
-        default:
-          break;
-      }
-    });
-  }
-
-  ngOnDestroy() {
-    this.statusSubscription.unsubscribe();
-  }
-
   onSubmit() {
-    this.loginInfo = <AuthLoginInfo>{
+    let loginInfo = <AuthLoginInfoVO>{
       username: this.form.username,
       password: this.form.password
     };
 
-    this.authService.login(this.loginInfo).subscribe(
+    this.authService.login(loginInfo).subscribe(
       data => {
+        console.log('LoginComponent.onSubmit() => data: ', data);
         this._isLoginFailed = false;
         //this.reloadPage();
       },
       error => {
-        console.error(error);
-        this._errorMessage = error.error.message;
+        console.error('LoginComponent.onSubmit() => error: ', error);
+        this._errorMessage = this.getErrorMessage(error);
         this._isLoginFailed = true;
       },
-      () => {   
+      () => {
+        console.log('LoginComponent.onSubmit() => completed'); 
       }
     );
   }
 
-  private loggedIn(isLoggedIn = true) {
-    this._isLoggedIn = isLoggedIn;
-    this._roles = isLoggedIn ? this.authService.loggedUser.roles.map(role => role.name) : undefined;
+  private getErrorMessage(error: any) {
+    return error.error.message ? error.error.message : JSON.parse(error.error).message ? JSON.parse(error.error).message : error.message;
   }
 
   private reloadPage() {
     window.location.reload();
   }
 
-  get isLoggedIn() {
-    return this._isLoggedIn;
-  }
-
   get isLoginFailed() {
     return this._isLoginFailed;
-  }
-
-  get roles() {
-    return this._roles;
   }
 
   get errorMessage() {

@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { SignUpInfo } from '../common/model/vo/sign-up-info';
 import { RegisterService } from './register.service';
+import { User } from '../common/model/user';
+import { Role, RoleName } from '../common/model/role';
 
 @Component({
   selector: 'app-register',
@@ -11,7 +12,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
   
   form: any = {};
 
-  private _signupInfo: SignUpInfo;
   private _isSignedUp = false;
   private _isSignUpFailed = false;
   private _errorMessage = '';
@@ -27,31 +27,33 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    this._signupInfo = <SignUpInfo>{
+    let user = <User>{
       name: this.form.name, 
       username: this.form.username, 
       email: this.form.email, 
       password: this.form.password, 
-      role: ['user']
+      roles: [<Role>{name: RoleName.ROLE_USER}]
     };
 
-    this.registerService.signUp(this._signupInfo).subscribe(
+    this.registerService.signUp(user).subscribe(
       data => {
+        console.log('RegisterComponent.onSubmit() => data: ', data);
         this._isSignedUp = true;
         this._isSignUpFailed = false;
       },
       error => {
-        console.error(error);
-        this._errorMessage = error.error.message;
+        console.error('RegisterComponent.onSubmit() => error: ', error);
+        this._errorMessage = this.getErrorMessage(error);
         this._isSignUpFailed = true;
       },
-      () => {        
+      () => {   
+        console.log('RegisterComponent.onSubmit() => completed');     
       }
     );
   }
 
-  get signupInfo() {
-    return this._signupInfo;
+  private getErrorMessage(error: any) {
+    return error.error.message ? error.error.message : JSON.parse(error.error).message ? JSON.parse(error.error).message : error.message;
   }
 
   get isSignedUp() {

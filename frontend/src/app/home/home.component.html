@@ -1,4 +1,4 @@
-<div *ngIf="info.token; else loggedOut">
+<div *ngIf="info && info.token; else loggedOut">
   <h5 class="text-primary">Your Information</h5>
   <p>
     <strong>Username:</strong> {{info.username}}<br />
