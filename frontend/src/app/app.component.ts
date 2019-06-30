@@ -2,9 +2,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
-import { TokenStorageService } from './auth/token-storage.service';
 import { AuthService, AuthStatus } from './auth/auth.service';
-
+import { RoleName } from './common/model/role';
 
 @Component({
   selector: 'app-root',
@@ -16,11 +15,10 @@ export class AppComponent implements OnInit, OnDestroy {
   private statusSubscription: Subscription;
 
   private _isLoggedIn = false;
-  private authorities: string[];
+  private authorities: RoleName[];
 
   constructor(
     private router: Router,
-    private tokenStorage: TokenStorageService,
     private authService: AuthService
   ) { }
 
@@ -29,7 +27,7 @@ export class AppComponent implements OnInit, OnDestroy {
       switch (status) {
         case AuthStatus.LOGGED_IN: {
           this._isLoggedIn = true;
-          this.authorities = this.tokenStorage.authorities;
+          this.authorities = this.authService.loggedUser.roles.map(role => role.name);
           break;
         }
         case AuthStatus.LOGGED_OUT: {
@@ -53,7 +51,7 @@ export class AppComponent implements OnInit, OnDestroy {
     if(!this._isLoggedIn)
       return false;
 
-    return this.authorities.some(role => role === authority);    
+    return this.authorities.some(role => role === RoleName[authority]);    
   }
 
   logout() {

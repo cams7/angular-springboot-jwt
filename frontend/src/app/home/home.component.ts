@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { TokenStorageService } from '../auth/token-storage.service';
+import { AuthService } from '../auth/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -10,14 +10,15 @@ export class HomeComponent implements OnInit {
   private _info: any;
 
   constructor(
-    private tokenStorage: TokenStorageService
+    private authService: AuthService
   ) { }
 
   ngOnInit() {
+    let loggedUser = this.authService.loggedUser;
     this._info = {
-      token : this.tokenStorage.token, 
-      username : this.tokenStorage.username, 
-      authorities : this.tokenStorage.authorities
+      token : this.authService.token, 
+      username : loggedUser.username, 
+      authorities : loggedUser.roles.map(role => role.name)
     };
   }
 

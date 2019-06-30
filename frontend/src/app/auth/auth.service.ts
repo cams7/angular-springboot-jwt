@@ -7,6 +7,8 @@ import { TokenStorageService } from './token-storage.service';
 import { AuthLoginInfo } from './model/auth-login-info';
 import { JwtResponse } from './model/jwt-response';
 import { SignUpInfo } from './model/sign-up-info';
+import { User } from '../common/model/user';
+import { Role, RoleName } from '../common/model/role';
 
 
 const httpOptions = {
@@ -21,6 +23,7 @@ export class AuthService {
   private signupUrl = 'http://localhost:8080/api/auth/signup';
 
   private _authStatus: ReplaySubject<AuthStatus> = new ReplaySubject();
+  private _loggedUser: User;
 
   constructor(
     private http: HttpClient,
@@ -31,8 +34,9 @@ export class AuthService {
     return this.attemptAuth(credentials).pipe(
       tap(data => {
         this.tokenStorage.saveToken(data.token);
-        this.tokenStorage.saveUsername(data.username);
-        this.tokenStorage.saveAuthorities(data.authorities);
+
+        let roles: Role[] = data.authorities.map((authority: any) => RoleName[authority.authority]).map(roleName => <Role>{name: roleName});           
+        this._loggedUser = <User>{username: data.username, roles: roles};
         this._authStatus.next(AuthStatus.LOGGED_IN);
       })
     );
@@ -53,6 +57,14 @@ export class AuthService {
 
   get authStatus(): Observable<AuthStatus> {
     return this._authStatus.asObservable();
+  }
+
+  get loggedUser() {
+    return this._loggedUser;
+  }
+
+  get token() {
+    return this.tokenStorage.token;
   }
 }
 

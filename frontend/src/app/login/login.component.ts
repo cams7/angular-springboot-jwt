@@ -2,8 +2,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { AuthService, AuthStatus } from '../auth/auth.service';
-import { TokenStorageService } from '../auth/token-storage.service';
 import { AuthLoginInfo } from '../auth/model/auth-login-info';
+import { RoleName } from '../common/model/role';
 
 @Component({
   selector: 'app-login',
@@ -15,7 +15,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   form: any = {};
   private _isLoggedIn = false;
   private _isLoginFailed = false;
-  private _roles: string[] = [];
+  private _roles: RoleName[];
   private _errorMessage = '';
 
   private loginInfo: AuthLoginInfo;
@@ -23,8 +23,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   private statusSubscription: Subscription;
 
   constructor(
-    private authService: AuthService,
-    private tokenStorage: TokenStorageService
+    private authService: AuthService
   ) { }
 
   ngOnInit() {
@@ -71,7 +70,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   private loggedIn(isLoggedIn = true) {
     this._isLoggedIn = isLoggedIn;
-    this._roles = isLoggedIn ? this.tokenStorage.authorities : undefined;
+    this._roles = isLoggedIn ? this.authService.loggedUser.roles.map(role => role.name) : undefined;
   }
 
   private reloadPage() {
