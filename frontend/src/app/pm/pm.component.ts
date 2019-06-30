@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from '../services/user.service';
+import { PmService } from './pm.service';
 
 @Component({
   selector: 'app-pm',
@@ -11,11 +11,11 @@ export class PmComponent implements OnInit {
   private _errorMessage: string;
 
   constructor(
-    private userService: UserService
+    private pmService: PmService
   ) { }
 
   ngOnInit() {
-    this.userService.pmBoard.subscribe(
+    this.pmService.pmBoard.subscribe(
       data => {
         this._board = data;
       },

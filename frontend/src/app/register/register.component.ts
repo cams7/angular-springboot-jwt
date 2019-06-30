@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { SignUpInfo } from '../auth/model/sign-up-info';
-import { AuthService } from '../auth/auth.service';
+import { SignUpInfo } from '../common/model/vo/sign-up-info';
+import { RegisterService } from './register.service';
 
 @Component({
   selector: 'app-register',
@@ -17,7 +17,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   private _errorMessage = '';
 
   constructor(
-    private authService: AuthService
+    private registerService: RegisterService
   ) { }
 
   ngOnInit() {
@@ -35,7 +35,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
       role: ['user']
     };
 
-    this.authService.signUp(this._signupInfo).subscribe(
+    this.registerService.signUp(this._signupInfo).subscribe(
       data => {
         this._isSignedUp = true;
         this._isSignUpFailed = false;

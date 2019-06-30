@@ -6,10 +6,8 @@ import { tap } from 'rxjs/operators';
 import { TokenStorageService } from './token-storage.service';
 import { AuthLoginInfo } from './model/auth-login-info';
 import { JwtResponse } from './model/jwt-response';
-import { SignUpInfo } from './model/sign-up-info';
 import { User } from '../common/model/user';
 import { Role, RoleName } from '../common/model/role';
-
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -20,8 +18,7 @@ const httpOptions = {
 export class AuthService {
 
   private loginUrl = 'http://localhost:8080/api/auth/signin';
-  private signupUrl = 'http://localhost:8080/api/auth/signup';
-
+  
   private _authStatus: ReplaySubject<AuthStatus> = new ReplaySubject();
   private _loggedUser: User;
 
@@ -45,11 +42,7 @@ export class AuthService {
   logout() {
     this.tokenStorage.signOut();
     this._authStatus.next(AuthStatus.LOGGED_OUT);
-  }
-
-  signUp(info: SignUpInfo): Observable<string> {
-    return this.http.post<string>(this.signupUrl, info, httpOptions);
-  }
+  }  
 
   private attemptAuth(credentials: AuthLoginInfo): Observable<JwtResponse> {
     return this.http.post<JwtResponse>(this.loginUrl, credentials, httpOptions);
