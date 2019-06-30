@@ -19,6 +19,7 @@ import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -27,6 +28,7 @@ import javax.validation.constraints.Size;
 import org.hibernate.annotations.NaturalId;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import br.com.cams7.app.View;
@@ -91,9 +93,13 @@ public class UserEntity extends Auditable {
 	@ApiModelProperty(notes = "Senha criptografada do usuário.", example = "M!nh@S&nh@2019", required = true, position = 8)
 	@JsonView(View.LoggedIn.class)
 	@NotBlank
-	@Size(min = 6, max = 100)
-	@Column(name = "senha")
+	@Size(min = 6, max = 30)
+	@Transient
 	private String password;
+
+	@JsonIgnore
+	@Column(name = "senha", length = 100)
+	private String encryptedPassword;
 
 	@ApiModelProperty(notes = "Listagem com as funções (ROLES) do usuário.", required = false, position = 9)
 	@JsonView(View.Public.class)

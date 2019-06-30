@@ -1,7 +1,7 @@
 /**
  * 
  */
-package br.com.cams7.app.message.response;
+package br.com.cams7.app.model.vo;
 
 import java.util.Collection;
 
@@ -16,7 +16,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public class JwtResponse {
+public class JwtResponseVO {
 
 	private String token;
 	private final String type = "Bearer";

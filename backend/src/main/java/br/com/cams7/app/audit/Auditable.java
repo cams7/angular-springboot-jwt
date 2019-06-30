@@ -3,6 +3,8 @@
  */
 package br.com.cams7.app.audit;
 
+import static io.swagger.annotations.ApiModelProperty.AccessMode.READ_ONLY;
+
 import java.time.LocalDateTime;
 
 import javax.persistence.Column;
@@ -36,27 +38,27 @@ import lombok.Setter;
 @EntityListeners(AuditingEntityListener.class)
 public abstract class Auditable {
 
-	@ApiModelProperty(notes = "Usuário que criou essa entidade.", required = false, position = 0)
+	@ApiModelProperty(notes = "Usuário que criou essa entidade.", accessMode = READ_ONLY, hidden = true, position = 0)
 	@JsonView(View.Public.class)
 	@CreatedBy
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "criado_por", nullable = true)
 	private UserEntity createdBy;
 
-	@ApiModelProperty(notes = "Data de criação dessa entidade.", required = false, position = 1)
+	@ApiModelProperty(notes = "Data de criação dessa entidade.", accessMode = READ_ONLY, hidden = true, position = 1)
 	@JsonView(View.Public.class)
 	@CreatedDate
 	@Column(name = "data_criacao", nullable = true)
 	private LocalDateTime createdDate;
 
-	@ApiModelProperty(notes = "Usuário que alterou essa entidade.", required = false, position = 2)
+	@ApiModelProperty(notes = "Usuário que alterou essa entidade.", accessMode = READ_ONLY, hidden = true, position = 2)
 	@JsonView(View.Public.class)
 	@LastModifiedBy
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "modificado_por", nullable = true)
 	private UserEntity lastModifiedBy;
 
-	@ApiModelProperty(notes = "Data de alteração dessa entidade.", required = false, position = 3)
+	@ApiModelProperty(notes = "Data de alteração dessa entidade.", accessMode = READ_ONLY, hidden = true, position = 3)
 	@JsonView(View.Public.class)
 	@LastModifiedDate
 	@Column(name = "data_alteracao", nullable = true)

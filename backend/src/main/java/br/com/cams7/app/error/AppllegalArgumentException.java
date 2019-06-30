@@ -7,14 +7,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
- * @author cams7
+ * @author ceanm
  *
  */
 @SuppressWarnings("serial")
-@ResponseStatus(HttpStatus.NOT_FOUND)
-public class ResourceNotFoundException extends RuntimeException {
+@ResponseStatus(HttpStatus.BAD_REQUEST)
+public class AppllegalArgumentException extends RuntimeException {
 
-	public ResourceNotFoundException(String message) {
+	public AppllegalArgumentException(String message) {
 		super(message);
 	}
 

@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import br.com.cams7.app.error.ResourceNotFoundException;
+import br.com.cams7.app.error.AppResourceNotFoundException;
 import br.com.cams7.app.model.RoleEntity;
 import br.com.cams7.app.model.RoleEntity.RoleName;
 import br.com.cams7.app.repository.RoleRepository;
@@ -27,7 +27,7 @@ public class RoleServiceImpl implements RoleService {
 	@Override
 	public RoleEntity getRoleByName(RoleName roleName) {
 		return roleRepository.findByName(roleName).orElseThrow(
-				() -> new ResourceNotFoundException(String.format("Fail! -> Cause: %s not find.", roleName.name())));
+				() -> new AppResourceNotFoundException(String.format("Fail! -> Cause: %s not find.", roleName.name())));
 	}
 
 }

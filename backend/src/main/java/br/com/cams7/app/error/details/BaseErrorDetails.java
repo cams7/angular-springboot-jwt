@@ -13,11 +13,12 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-public abstract class BaseErrorDetais {
+public abstract class BaseErrorDetails {
 
-	private String title;
-	private int status;
-	private String detail;
-	private long timestamp;
-	private String developerMessage;
+	private String error;
+	private String message;
+	private String path;
+	private int status;	
+	private String timestamp;
+	private String trace;
 }

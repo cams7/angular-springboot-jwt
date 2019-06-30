@@ -14,7 +14,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import br.com.cams7.app.error.ResourceNotFoundException;
+import br.com.cams7.app.error.AppResourceNotFoundException;
 import br.com.cams7.app.model.UserEntity;
 import br.com.cams7.app.security.UserPrinciple;
 
@@ -36,8 +36,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 					.map(role -> new SimpleGrantedAuthority(role.getName().name())).collect(Collectors.toList());
 
 			return UserPrinciple.builder().id(user.getId()).name(user.getName()).username(user.getUsername())
-					.email(user.getEmail()).password(user.getPassword()).authorities(authorities).build();
-		} catch (ResourceNotFoundException e) {
+					.email(user.getEmail()).password(user.getEncryptedPassword()).authorities(authorities).build();
+		} catch (AppResourceNotFoundException e) {
 			throw new UsernameNotFoundException(e.getMessage());
 		}
 	}

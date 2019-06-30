@@ -9,11 +9,11 @@ import lombok.Builder;
  * @author cams7
  *
  */
-public class ErrorDetails extends BaseErrorDetais {
+public class ErrorDetails extends BaseErrorDetails {
 
 	@Builder
-	protected ErrorDetails(String title, int status, String detail, long timestamp, String developerMessage) {
-		super(title, status, detail, timestamp, developerMessage);
+	protected ErrorDetails(String error, String message, String path, int status, String timestamp, String trace) {
+		super(error, message, path, status, timestamp, trace);
 	}
 
 }

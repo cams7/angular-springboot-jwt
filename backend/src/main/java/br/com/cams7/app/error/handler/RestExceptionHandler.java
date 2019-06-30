@@ -3,10 +3,10 @@
  */
 package br.com.cams7.app.error.handler;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -17,10 +17,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import br.com.cams7.app.error.InvalidDataException;
-import br.com.cams7.app.error.ResourceNotFoundException;
+import br.com.cams7.app.error.AppInvalidDataException;
+import br.com.cams7.app.error.AppResourceNotFoundException;
+import br.com.cams7.app.error.AppllegalArgumentException;
 import br.com.cams7.app.error.details.ErrorDetails;
-import br.com.cams7.app.error.details.ValidationErrorDetais;
+import br.com.cams7.app.error.details.ValidationErrorDetails;
 
 /**
  * @author cams7
@@ -29,51 +30,57 @@ import br.com.cams7.app.error.details.ValidationErrorDetais;
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
-	@ExceptionHandler(ResourceNotFoundException.class)
-	public ResponseEntity<?> handleResourceNotFoundException(ResourceNotFoundException exception) {
-		ErrorDetails details = ErrorDetails.builder().title("Resource not found").status(HttpStatus.NOT_FOUND.value())
-				.detail(exception.getMessage()).timestamp(new Date().getTime())
-				.developerMessage(exception.getClass().getName()).build();
+	@ExceptionHandler(AppResourceNotFoundException.class)
+	public ResponseEntity<?> handleException(AppResourceNotFoundException exception) {
+		ErrorDetails details = ErrorDetails.builder().error("Resource not found").message(exception.getMessage())
+				.path("").status(HttpStatus.NOT_FOUND.value()).timestamp(timestamp())
+				.trace(exception.getClass().getName()).build();
 		return new ResponseEntity<>(details, HttpStatus.NOT_FOUND);
 	}
 
-	@ExceptionHandler(InvalidDataException.class)
-	public ResponseEntity<?> handleInvalidDataException(InvalidDataException exception) {
-		ErrorDetails details = ErrorDetails.builder().title("Invalid data").status(HttpStatus.BAD_REQUEST.value())
-				.detail(exception.getMessage()).timestamp(new Date().getTime())
-				.developerMessage(exception.getClass().getName()).build();
+	@ExceptionHandler(AppInvalidDataException.class)
+	public ResponseEntity<?> handleException(AppInvalidDataException exception) {
+		ErrorDetails details = ErrorDetails.builder().error("Invalid data").message(exception.getMessage()).path("")
+				.status(HttpStatus.BAD_REQUEST.value()).timestamp(timestamp()).trace(exception.getClass().getName())
+				.build();
 		return new ResponseEntity<>(details, HttpStatus.BAD_REQUEST);
 	}
 
-	@ExceptionHandler(NoSuchElementException.class)
-	public ResponseEntity<?> handleNoSuchElementException(NoSuchElementException exception) {
-		ErrorDetails details = ErrorDetails.builder().title("Resource not found").status(HttpStatus.NOT_FOUND.value())
-				.detail(exception.getMessage()).timestamp(new Date().getTime())
-				.developerMessage(exception.getClass().getName()).build();
-		return new ResponseEntity<>(details, HttpStatus.NOT_FOUND);
+	@ExceptionHandler(AppllegalArgumentException.class)
+	public ResponseEntity<?> handleException(AppllegalArgumentException exception) {
+		ErrorDetails details = ErrorDetails.builder().error("Ilegal argument").message(exception.getMessage()).path("")
+				.status(HttpStatus.BAD_REQUEST.value()).timestamp(timestamp()).trace(exception.getClass().getName())
+				.build();
+		return new ResponseEntity<>(details, HttpStatus.BAD_REQUEST);
 	}
 
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException exception,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
-		final List<ValidationErrorDetais.Field> fields = new ArrayList<>();
+		final List<ValidationErrorDetails.Field> fields = new ArrayList<>();
 		exception.getBindingResult().getFieldErrors().forEach(error -> {
-			fields.add(new ValidationErrorDetais.Field(error.getField(), error.getDefaultMessage()));
+			fields.add(new ValidationErrorDetails.Field(error.getField(), error.getDefaultMessage()));
 		});
 
-		ValidationErrorDetais details = ValidationErrorDetais.builder().title("Field validation error")
-				.status(status.value()).detail("Field validation error").timestamp(new Date().getTime())
-				.developerMessage(exception.getClass().getName())
-				.fields(fields.stream().toArray(ValidationErrorDetais.Field[]::new)).build();
+		ValidationErrorDetails details = ValidationErrorDetails.builder().error("Field validation error")
+				.message("Field validation error").path(request.getContextPath()).status(status.value())
+				.timestamp(timestamp()).trace(exception.getClass().getName())
+				.fields(fields.stream().toArray(ValidationErrorDetails.Field[]::new)).build();
 		return new ResponseEntity<>(details, headers, status);
 	}
 
 	@Override
 	protected ResponseEntity<Object> handleExceptionInternal(Exception exception, Object body, HttpHeaders headers,
 			HttpStatus status, WebRequest request) {
-		ErrorDetails details = ErrorDetails.builder().title("Internal Exception").status(status.value())
-				.detail(exception.getMessage()).timestamp(new Date().getTime())
-				.developerMessage(exception.getClass().getName()).build();
+		ErrorDetails details = ErrorDetails.builder().error("Internal Exception").message(exception.getMessage())
+				.path(request.getContextPath()).status(status.value()).timestamp(timestamp())
+				.trace(exception.getClass().getName()).build();
 		return new ResponseEntity<>(details, headers, status);
+	}
+
+	private static String timestamp() {
+		// 2019-06-30T21:16:52.342+0000
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		return LocalDateTime.now().format(formatter);
 	}
 }
